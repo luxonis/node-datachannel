@@ -1,7 +1,7 @@
 {
-  "name": "node-datachannel",
+  "name": "@luxonis/node-datachannel",
   "version": "0.4.0",
-  "description": "libdatachannel node bindings",
+  "description": "Luxonis fork of node-datachannel",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "directories": {
@@ -39,14 +39,18 @@
     {
       "name": "Paul-Louis Ageneau",
       "url": "https://github.com/paullouisageneau"
+    },
+    {
+      "name": "Filip Prochazka",
+      "url": "https://github.com/filipproch"
     }
   ],
   "license": "LGPL",
   "gypfile": true,
   "bugs": {
-    "url": "https://github.com/murat-dogan/node-datachannel/issues"
+    "url": "https://github.com/luxonis/node-datachannel/issues"
   },
-  "homepage": "https://github.com/murat-dogan/node-datachannel#readme",
+  "homepage": "https://github.com/luxonis/node-datachannel#readme",
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
