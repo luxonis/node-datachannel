@@ -98,3 +98,27 @@ void RtcpSrReporterWrapper::setNeedsToReport(const Napi::CallbackInfo &info)
 
     mRtcpSrReporterPtr->setNeedsToReport();
 }
+
+void RtcpSrReporterWrapper::setStartTimeToCurrent(const Napi::CallbackInfo &info)
+{
+    if (!mRtcpSrReporterPtr)
+    {
+        Napi::Error::New(info.Env(), "setStartTimeToCurrent() called on invalid reporter").ThrowAsJavaScriptException();
+        return;
+    }
+
+    auto currentTime = double(std::chrono::high_resolution_clock::now().time_since_epoch().count()) / (1000 * 1000);
+    mRtcpSrReporterPtr->rtpConfig->setStartTime(currentTime, rtc::RtpPacketizationConfig::EpochStart::T1970);
+}
+
+
+void RtcpSrReporterWrapper::startRecording(const Napi::CallbackInfo &info)
+{
+    if (!mRtcpSrReporterPtr)
+    {
+        Napi::Error::New(info.Env(), "startRecording() called on invalid reporter").ThrowAsJavaScriptException();
+        return;
+    }
+
+    mRtcpSrReporterPtr->startRecording();
+}

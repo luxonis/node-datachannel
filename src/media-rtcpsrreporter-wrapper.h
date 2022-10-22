@@ -25,6 +25,8 @@ public:
     Napi::Value configGetTimestamp(const Napi::CallbackInfo &info);
     Napi::Value configTimestampToSeconds(const Napi::CallbackInfo &info);
     void setNeedsToReport(const Napi::CallbackInfo &info);
+    void setStartTimeToCurrent(const Napi::CallbackInfo &info);
+    void startRecording(const Napi::CallbackInfo &info);
 
     // Close all existing track
     static void CloseAll();

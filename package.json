@@ -1,6 +1,6 @@
 {
   "name": "@luxonis/node-datachannel",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Luxonis fork of node-datachannel",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
