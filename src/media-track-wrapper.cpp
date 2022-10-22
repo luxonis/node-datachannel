@@ -31,6 +31,7 @@ Napi::Object TrackWrapper::Init(Napi::Env env, Napi::Object exports)
             InstanceMethod("maxMessageSize", &TrackWrapper::maxMessageSize),
             InstanceMethod("requestKeyframe", &TrackWrapper::requestKeyframe),
             InstanceMethod("setMediaHandler", &TrackWrapper::setMediaHandler),
+            InstanceMethod("setH264Packetizer", &TrackWrapper::setH264Packetizer),
             InstanceMethod("onOpen", &TrackWrapper::onOpen),
             InstanceMethod("onClosed", &TrackWrapper::onClosed),
             InstanceMethod("onError", &TrackWrapper::onError),
@@ -254,6 +255,18 @@ void TrackWrapper::setMediaHandler(const Napi::CallbackInfo &info)
 
     RtcpReceivingSessionWrapper *handler = Napi::ObjectWrap<RtcpReceivingSessionWrapper>::Unwrap(info[0].As<Napi::Object>());
     mTrackPtr->setMediaHandler(handler->getSessionInstance());
+}
+
+void TrackWrapper::setH264Packetizer(const Napi::CallbackInfo &info)
+{
+    if (!mTrackPtr)
+    {
+        Napi::Error::New(info.Env(), "setMediaHandler() called on destroyed track").ThrowAsJavaScriptException();
+        return;
+    }
+
+    Napi::Env env = info.Env();
+    int length = info.Length();
 }
 
 void TrackWrapper::onOpen(const Napi::CallbackInfo &info)
