@@ -3,6 +3,17 @@ src
 examples
 build
 cmake
+sysroot
 .github
 .vscode
 test
+README.md
+CMakeLists.txt
+BULDING.md
+API.md
+.prettierrc.js
+.eslintrc.js
+.eslintignore
+.editorconfig
+node_datachannel.node
+prepare-prebuilds.js
