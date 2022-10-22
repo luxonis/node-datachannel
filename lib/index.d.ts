@@ -177,6 +177,7 @@ export class Track {
     setBufferedAmountLowThreshold(newSize: number): void;
     requestKeyframe(): boolean;
     setMediaHandler(handler: RtcpReceivingSession): void;
+    setH264Packetizer(): RtcpSrReporter;
     onOpen(cb: () => void): void;
     onClosed(cb: () => void): void;
     onError(cb: (err: string) => void): void;
@@ -231,4 +232,11 @@ export class PeerConnection {
 export class DataChannelStream extends stream.Duplex {
     constructor(rawChannel: DataChannel, options?: Omit<stream.DuplexOptions, 'objectMode'>);
     get label(): string;
+}
+
+export class RtcpSrReporter {
+    previousReportedTimestamp(): number;
+    configGetTimestamp(): number;
+    configTimestampToSeconds(value: number): number;
+    setNeedsToReport(): void;
 }

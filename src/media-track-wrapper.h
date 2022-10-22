@@ -32,7 +32,7 @@ public:
   Napi::Value maxMessageSize(const Napi::CallbackInfo &info);
   Napi::Value requestKeyframe(const Napi::CallbackInfo &info);
   void setMediaHandler(const Napi::CallbackInfo &info);
-  void setH264Packetizer(const Napi::CallbackInfo &info);
+  Napi::Value setH264Packetizer(const Napi::CallbackInfo &info);
 
   // Callbacks
   void onOpen(const Napi::CallbackInfo &info);

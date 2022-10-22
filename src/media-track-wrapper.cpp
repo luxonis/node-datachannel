@@ -1,6 +1,7 @@
 #include "media-track-wrapper.h"
 #include "media-direction.h"
 #include "media-rtcpreceivingsession-wrapper.h"
+#include "media-rtcpsrreporter-wrapper.h"
 
 Napi::FunctionReference TrackWrapper::constructor;
 std::unordered_set<TrackWrapper *> TrackWrapper::instances;
@@ -257,16 +258,46 @@ void TrackWrapper::setMediaHandler(const Napi::CallbackInfo &info)
     mTrackPtr->setMediaHandler(handler->getSessionInstance());
 }
 
-void TrackWrapper::setH264Packetizer(const Napi::CallbackInfo &info)
+Napi::Value TrackWrapper::setH264Packetizer(const Napi::CallbackInfo &info)
 {
+    Napi::Env env = info.Env();
+
     if (!mTrackPtr)
     {
         Napi::Error::New(info.Env(), "setMediaHandler() called on destroyed track").ThrowAsJavaScriptException();
-        return;
+        return env.Null();
     }
 
-    Napi::Env env = info.Env();
     int length = info.Length();
+
+    if (length < 3 || !info[0].IsNumber() || !info[1].IsString() || !info[2].IsNumber()) {
+        Napi::TypeError::New(env, "missing or invalid parameters").ThrowAsJavaScriptException();
+        return env.Null();
+    }
+
+    auto rtpConfig = std::make_shared<rtc::RtpPacketizationConfig>(
+        info[0].As<Napi::Number>().Uint32Value(),
+        info[1].As<Napi::String>().Utf8Value(),
+        info[2].As<Napi::Number>().Uint32Value(),
+        rtc::H264RtpPacketizer::defaultClockRate,
+        0,
+        0);
+    // create packetizer
+    auto packetizer =
+        std::make_shared<rtc::H264RtpPacketizer>(rtc::H264RtpPacketizer::Separator::StartSequence, rtpConfig);
+    // create H264 handler
+    auto h264Handler = std::make_shared<rtc::H264PacketizationHandler>(packetizer);
+    // add RTCP SR handler
+    auto srReporter = std::make_shared<rtc::RtcpSrReporter>(rtpConfig);
+    h264Handler->addToChain(srReporter);
+    // add RTCP NACK handler
+    auto nackResponder = std::make_shared<rtc::RtcpNackResponder>();
+    h264Handler->addToChain(nackResponder);
+    
+    mTrackPtr->setMediaHandler(h264Handler);
+    auto instance = RtcpSrReporterWrapper::constructor.New({Napi::External<std::shared_ptr<rtc::RtcpSrReporter>>::New(info.Env(), &srReporter)});
+
+    return instance;
 }
 
 void TrackWrapper::onOpen(const Napi::CallbackInfo &info)
@@ -289,7 +320,8 @@ void TrackWrapper::onOpen(const Napi::CallbackInfo &info)
     // Callback
     mOnOpenCallback = std::make_unique<ThreadSafeCallback>(info[0].As<Napi::Function>());
 
-    mTrackPtr->onOpen([&]() {
+    mTrackPtr->onOpen([&]()
+                      {
         if (mOnOpenCallback)
             mOnOpenCallback->call([this](Napi::Env env, std::vector<napi_value> &args) {
                 // Check the track is not closed
@@ -322,7 +354,8 @@ void TrackWrapper::onClosed(const Napi::CallbackInfo &info)
     // Callback
     mOnClosedCallback = std::make_unique<ThreadSafeCallback>(info[0].As<Napi::Function>());
 
-    mTrackPtr->onClosed([&]() {
+    mTrackPtr->onClosed([&]()
+                        {
         if (mOnClosedCallback)
             mOnClosedCallback->call([this](Napi::Env env, std::vector<napi_value> &args) {
                 // Do not check if the data channel has been closed here
@@ -353,7 +386,8 @@ void TrackWrapper::onError(const Napi::CallbackInfo &info)
     // Callback
     mOnErrorCallback = std::make_unique<ThreadSafeCallback>(info[0].As<Napi::Function>());
 
-    mTrackPtr->onError([&](const std::string &error) {
+    mTrackPtr->onError([&](const std::string &error)
+                       {
         if (mOnErrorCallback)
             mOnErrorCallback->call([this, error](Napi::Env env, std::vector<napi_value> &args) {
                 // Check the track is not closed
@@ -386,7 +420,8 @@ void TrackWrapper::onMessage(const Napi::CallbackInfo &info)
     // Callback
     mOnMessageCallback = std::make_unique<ThreadSafeCallback>(info[0].As<Napi::Function>());
 
-    mTrackPtr->onMessage([&](std::variant<rtc::binary, std::string> message) {
+    mTrackPtr->onMessage([&](std::variant<rtc::binary, std::string> message)
+                         {
         if (mOnMessageCallback)
             mOnMessageCallback->call([this, message = std::move(message)](Napi::Env env, std::vector<napi_value> &args) {
                 // Check the track is not closed
