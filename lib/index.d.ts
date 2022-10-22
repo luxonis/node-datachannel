@@ -177,7 +177,7 @@ export class Track {
     setBufferedAmountLowThreshold(newSize: number): void;
     requestKeyframe(): boolean;
     setMediaHandler(handler: RtcpReceivingSession): void;
-    setH264Packetizer(): RtcpSrReporter;
+    setH264Packetizer(ssrc: number, cname: string, payloadType: number): RtcpSrReporter;
     onOpen(cb: () => void): void;
     onClosed(cb: () => void): void;
     onError(cb: (err: string) => void): void;
