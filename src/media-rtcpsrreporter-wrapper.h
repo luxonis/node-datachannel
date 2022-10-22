@@ -15,26 +15,26 @@
 class RtcpSrReporterWrapper : public Napi::ObjectWrap<RtcpSrReporterWrapper>
 {
 public:
-  static Napi::FunctionReference constructor;
-  static Napi::Object Init(Napi::Env env, Napi::Object exports);
-  RtcpSrReporterWrapper(const Napi::CallbackInfo &info);
-  ~RtcpSrReporterWrapper();
+    static Napi::FunctionReference constructor;
+    static Napi::Object Init(Napi::Env env, Napi::Object exports);
+    RtcpSrReporterWrapper(const Napi::CallbackInfo &info);
+    ~RtcpSrReporterWrapper();
 
-  // Functions
-  Napi::Value previousReportedTimestamp(const Napi::CallbackInfo &info);
-  Napi::Value configGetTimestamp(const Napi::CallbackInfo &info);
-  Napi::Value configTimestampToSeconds(const Napi::CallbackInfo &info);
-  void setNeedsToReport(const Napi::CallbackInfo &info);
+    // Functions
+    Napi::Value previousReportedTimestamp(const Napi::CallbackInfo &info);
+    Napi::Value configGetTimestamp(const Napi::CallbackInfo &info);
+    Napi::Value configTimestampToSeconds(const Napi::CallbackInfo &info);
+    void setNeedsToReport(const Napi::CallbackInfo &info);
 
-  // Close all existing track
-  static void CloseAll();
+    // Close all existing track
+    static void CloseAll();
 
 private:
-  static std::unordered_set<RtcpSrReporterWrapper *> instances;
+    static std::unordered_set<RtcpSrReporterWrapper *> instances;
 
-  void doClose();
+    void doClose();
 
-  std::shared_ptr<rtc::RtcpSrReporter> mRtcpSrReporterPtr = nullptr;
+    std::shared_ptr<rtc::RtcpSrReporter> mRtcpSrReporterPtr = nullptr;
 };
 
 #endif // MEDIA_RTCPSRREPORTER_WRAPPER_H

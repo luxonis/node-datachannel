@@ -32,7 +32,7 @@ Napi::Object RtcpSrReporterWrapper::Init(Napi::Env env, Napi::Object exports)
   return exports; 
 }
 
-RtcpSrReporterWrapper::RtcpSrReporterWrapper(const Napi::CallbackInfo &info)
+RtcpSrReporterWrapper::RtcpSrReporterWrapper(const Napi::CallbackInfo &info) : Napi::ObjectWrap<RtcpSrReporterWrapper>(info)
 {
     mRtcpSrReporterPtr = *(info[0].As<Napi::External<std::shared_ptr<rtc::RtcpSrReporter>>>().Data());
 
@@ -93,7 +93,7 @@ void RtcpSrReporterWrapper::setNeedsToReport(const Napi::CallbackInfo &info)
     if (!mRtcpSrReporterPtr)
     {
         Napi::Error::New(info.Env(), "setNeedsToReport() called on invalid reporter").ThrowAsJavaScriptException();
-        return info.Env().Null();
+        return;
     }
 
     mRtcpSrReporterPtr->setNeedsToReport();
