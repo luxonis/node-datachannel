@@ -2,47 +2,27 @@ name: Build - Linux
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - fork*
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
-  build-linux:
+  build-and-publish:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
         node-version: ["18.5.0"]
-    permissions: write-all
+    permissions: 
+      contents: read
+      packages: write 
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Build
-        run: npm install --build-from-source
-        env:
-          CI: true
-      - name: Test
-        run: npm run test
-        env:
-          CI: true
-      - name: Upload
-        run: node_modules/.bin/prebuild --upload -u ${{ secrets.GITHUB_TOKEN }}
-        env:
-          CI: true
-
-  build-linux-arm64:
-    runs-on: ubuntu-20.04
-    permissions: write-all
-    strategy:
-      matrix:
-        node-version: ["18.5.0"]
-    steps:
-      - uses: actions/checkout@v3
+          registry-url: "https://npm.pkg.github.com/"
+          scope: "@luxonis"
       - name: Prepare Cross Compile
         run: |
           sudo apt update
@@ -52,37 +32,21 @@ jobs:
           tar xf debian_sid_arm64_sysroot.tar.xz
           echo "ARM64_SYSROOT=$(pwd)" >> $GITHUB_ENV
           ls -l
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: Build & Upload
-        run: |
-          npm install --ignore-scripts
-          node_modules/.bin/prebuild --backend cmake-js --arch arm64 --upload -u ${{ secrets.GITHUB_TOKEN }} -- --CDCMAKE_TOOLCHAIN_FILE:FILEPATH=./cmake/toolchain/arm64.cmake
-        env:
-          CI: true
-
-  npm-publish:
-    needs: [build-linux, build-linux-arm64]
-    name: npm-publish
-    runs-on: ubuntu-latest
-    permissions: 
-      contents: read
-      packages: write 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18.5.0"
-          registry-url: "https://npm.pkg.github.com/"
-          scope: "@luxonis"
-      - name: Publish
+      - name: Build
         run: |
           npm install
+          npm run prepare-prebuilds
+          npm run prepare-prebuilds-arm64
+        env:
+          CI: true
+      - name: Test
+        run: |
+          npm install
+          npm run test
+        env:
+          CI: true
+      - name: Publish
+        run: |
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
