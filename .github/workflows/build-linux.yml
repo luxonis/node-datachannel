@@ -2,6 +2,9 @@ name: Build - Linux
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - fork*
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
@@ -12,7 +15,7 @@ jobs:
     strategy:
       matrix:
         node-version: ["18.5.0"]
-
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -34,7 +37,7 @@ jobs:
 
   build-linux-arm64:
     runs-on: ubuntu-20.04
-
+    permissions: write-all
     strategy:
       matrix:
         node-version: ["18.5.0"]
