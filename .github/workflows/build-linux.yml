@@ -35,8 +35,10 @@ jobs:
       - name: Build
         run: |
           npm install
-          npm run prepare-prebuilds
-          npm run prepare-prebuilds-arm64
+          npm run clean
+          npm run prepare-prebuilds:amd64
+          npm run clean
+          npm run prepare-prebuilds:arm64
         env:
           CI: true
       - name: Test

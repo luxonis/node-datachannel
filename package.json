@@ -11,10 +11,10 @@
   "_from": "node-datachannel@latest",
   "scripts": {
     "postinstall": "node postinstall.js",
-    "prepare-prebuilds": "npm run build && node prepare-prebuilds.js x86_64",
-    "prepare-prebuilds-arm64": "npm run build:arm64 && node prepare-prebuilds.js aarch64",
+    "prepare-prebuilds:amd64": "npm run build && node prepare-prebuilds.js x86_64",
+    "prepare-prebuilds:arm64": "npm run build:arm64 && node prepare-prebuilds.js aarch64",
     "build": "cmake-js build",
-    "build:arm64": "cmake-js build --platform arm64 --CDCMAKE_TOOLCHAIN_FILE:FILEPATH=./cmake/toolchain/arm64.cmake",
+    "build:arm64": "cmake-js build --platform arm64 --CDCMAKE_TOOLCHAIN_FILE=./cmake/toolchain/arm64.cmake",
     "build:debug": "cmake-js build -D",
     "clean": "cmake-js clean",
     "lint": "eslint lib/**/* test/**/*",
