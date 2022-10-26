@@ -1,6 +1,6 @@
 {
   "name": "@luxonis/node-datachannel",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Luxonis fork of node-datachannel",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -56,16 +56,16 @@
     "@types/node": "^17.0.23",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "cmake-js": "^6.3.0",
+    "cmake-js": "7.0.0",
     "eslint": "^8.12.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
     "nan": "^2.15.0",
     "napi-thread-safe-callback-cancellable": "^0.0.7",
-    "node-addon-api": "^4.3.0",
+    "node-addon-api": "5.0.0",
     "prettier": "^2.6.2",
-    "typescript": "^4.6.3"
+    "typescript": "^4.8.4"
   },
   "dependencies": {
   }

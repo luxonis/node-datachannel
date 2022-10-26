@@ -6,7 +6,7 @@ set(CMAKE_C_COMPILER ${TOOLCHAIN_PREFIX}-gcc)
 set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}-g++)
 
 # Needed sysroot
-# https://github.com/webrtc-uwp/chromium-build/blob/master/linux/sysroot_scripts/sysroots.json
+# https://commondatastorage.googleapis.com/chrome-linux-sysroot
 set(CMAKE_SYSROOT "$ENV{ARM64_SYSROOT}")
 
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)

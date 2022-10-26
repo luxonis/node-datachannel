@@ -1,3 +1,4 @@
+#include <openssl/configuration.h>
 #include <napi.h>
 #include "rtc-wrapper.h"
 #include "peer-connection-wrapper.h"
