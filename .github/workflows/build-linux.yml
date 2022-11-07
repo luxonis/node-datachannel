@@ -30,8 +30,14 @@ jobs:
           sudo apt update
           sudo apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu crossbuild-essential-arm64
           mkdir sysroot && cd sysroot
-          wget https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/953c2471bc7e71a788309f6c2d2003e8b703305d/debian_sid_arm64_sysroot.tar.xz        
+          wget https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/953c2471bc7e71a788309f6c2d2003e8b703305d/debian_sid_arm64_sysroot.tar.xz
           tar xf debian_sid_arm64_sysroot.tar.xz
+          wget http://ftp.cz.debian.org/debian/pool/main/o/openssl/libssl3_3.0.7-1_arm64.deb
+          ar x libssl3_3.0.7-1_arm64.deb
+          tar xf data.tar.xz
+          wget http://ftp.cz.debian.org/debian/pool/main/o/openssl/libssl-dev_3.0.7-1_arm64.deb
+          ar x libssl-dev_3.0.7-1_arm64.deb
+          tar xf data.tar.xz
           echo "ARM64_SYSROOT=$(pwd)" >> $GITHUB_ENV
           ls -l
       - name: Build

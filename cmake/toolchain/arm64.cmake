@@ -15,3 +15,5 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(CMAKE_C_FLAGS "-march=armv8-a -fPIC -Wno-error=format-truncation" CACHE STRING "Compiler Flags")
 set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS}" CACHE STRING "Compiler Flags")
+
+set(OPENSSL_ROOT_DIR "${PROJECT_SOURCE_DIR}/sysroot/usr/lib/aarch64-linux-gnu")
