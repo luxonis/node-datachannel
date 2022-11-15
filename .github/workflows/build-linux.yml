@@ -28,6 +28,7 @@ jobs:
           scope: "@luxonis"
       - name: Build
         run: |
+          sudo apt-get update
           sudo apt-get install -y systemd-logind
           sudo loginctl enable-linger 1000
           npm install
