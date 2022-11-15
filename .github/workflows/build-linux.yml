@@ -1,17 +1,18 @@
-name: Build - Linux
+name: Build and publish NPM
 
 on:
   workflow_dispatch:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  NODE_VERSION: "18.5.0"
 
 jobs:
-  build-and-publish:
-    runs-on: ubuntu-20.04
+  build:
     strategy:
       matrix:
-        node-version: ["18.5.0"]
+        runner: ["buildjet-2vcpu-ubuntu-2204", "buildjet-2vcpu-ubuntu-2204-arm"]
+    runs-on: ${{ matrix.runner }}
     permissions: 
       contents: read
       packages: write 
@@ -19,42 +20,41 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: "https://npm.pkg.github.com/"
           scope: "@luxonis"
-      - name: Prepare Cross Compile
-        run: |
-          sudo apt update
-          sudo apt install -y g++-aarch64-linux-gnu gcc-aarch64-linux-gnu crossbuild-essential-arm64
-          mkdir sysroot && cd sysroot
-          wget https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain/953c2471bc7e71a788309f6c2d2003e8b703305d/debian_sid_arm64_sysroot.tar.xz
-          tar xf debian_sid_arm64_sysroot.tar.xz
-          wget http://ftp.cz.debian.org/debian/pool/main/o/openssl/libssl3_3.0.7-1_arm64.deb
-          ar x libssl3_3.0.7-1_arm64.deb
-          tar xf data.tar.xz
-          wget http://ftp.cz.debian.org/debian/pool/main/o/openssl/libssl-dev_3.0.7-1_arm64.deb
-          ar x libssl-dev_3.0.7-1_arm64.deb
-          tar xf data.tar.xz
-          echo "ARM64_SYSROOT=$(pwd)" >> $GITHUB_ENV
-          ls -l
       - name: Build
         run: |
           npm install
-          npm run clean
-          npm run prepare-prebuilds:amd64
-          npm run clean
-          npm run prepare-prebuilds:arm64
-        env:
-          CI: true
-      - name: Test
-        run: |
-          npm install
+          podman build -t nodedatachannel-builder --build-arg "NODE_VERSION=v${NODE_VERSION}" .
+          podman run --rm -v .:/app localhost/nodedatachannel-builder:latest
           npm run test
         env:
           CI: true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: prebuilds
+          path: prebuilds/*.node
+
+  publish:
+    runs-on: buildjet-2vcpu-ubuntu-2204
+    permissions: 
+      contents: read
+      packages: write 
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://npm.pkg.github.com/"
+          scope: "@luxonis"
+      - uses: actions/download-artifact@v3
       - name: Publish
         run: |
           npm publish

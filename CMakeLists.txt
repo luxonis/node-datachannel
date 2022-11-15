@@ -34,7 +34,7 @@ add_library(${PROJECT_NAME} SHARED
     ${CMAKE_JS_SRC}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 23)
+set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 
 target_include_directories(${PROJECT_NAME} PRIVATE
