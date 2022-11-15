@@ -41,6 +41,7 @@ jobs:
 
   publish:
     runs-on: buildjet-2vcpu-ubuntu-2204
+    needs: ["build"]
     permissions: 
       contents: read
       packages: write 
