@@ -74,6 +74,7 @@ jobs:
       - name: Publish
         run: |
           echo "Prepared prebuilds..."
+          npm install
           npm run relocate-prebuilds
           
           echo "Validating..."
