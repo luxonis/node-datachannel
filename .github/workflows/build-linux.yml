@@ -42,7 +42,7 @@ jobs:
           npm install
           podman build -t nodedatachannel-builder --build-arg "NODE_VERSION=v${NODE_VERSION}" .
           podman run --rm -v .:/app localhost/nodedatachannel-builder:latest
-          
+
           npm install
           npm run test
         env:
@@ -69,8 +69,15 @@ jobs:
           registry-url: "https://npm.pkg.github.com/"
           scope: "@luxonis"
       - uses: actions/download-artifact@v3
+        with:
+          path: prebuilds
       - name: Publish
         run: |
+          echo "Prepared prebuilds"
+          ls -la prebuilds/
+          
+          npm install
+          npm run test
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
