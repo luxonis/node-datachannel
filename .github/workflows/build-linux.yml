@@ -33,7 +33,7 @@ jobs:
           sudo tar -C / -xvf podman.tar --strip-components=2
           rm -rf podman.tar
           sudo chmod +x /usr/bin/crun
-          sudo mkdir /etc/containers
+          sudo mkdir /etc/containers || true
           sudo cp ./resources/podman-policy.json /etc/containers/policy.json
           sudo cp ./resources/podman-containers.conf /etc/containers/containers.conf
           sudo chmod -R 777 /etc/containers/
