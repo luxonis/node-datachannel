@@ -17,3 +17,4 @@ API.md
 .editorconfig
 node_datachannel.node
 prepare-prebuilds.js
+external
