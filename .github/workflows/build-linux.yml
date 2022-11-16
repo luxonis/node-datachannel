@@ -70,14 +70,17 @@ jobs:
           scope: "@luxonis"
       - uses: actions/download-artifact@v3
         with:
-          path: prebuilds
+          path: all-prebuilds
       - name: Publish
         run: |
-          echo "Prepared prebuilds"
-          ls -la prebuilds/
+          echo "Prepared prebuilds..."
+          npm run relocate-prebuilds
           
+          echo "Validating..."
           npm install
           npm run test
+
+          echo "Publishing..."
           npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
