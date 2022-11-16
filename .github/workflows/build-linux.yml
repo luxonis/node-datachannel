@@ -28,6 +28,7 @@ jobs:
           scope: "@luxonis"
       - name: Build
         run: |
+          sudo apt-get update && sudo apt-get install -y uidmap slirp4netns dbus-user-session
           wget -O podman.tar "https://hub-agent.luxonis.com/?podman=4.2.0&arch=$(uname -m)"
           sudo tar -C / -xvf podman.tar --strip-components=2
           rm -rf podman.tar
