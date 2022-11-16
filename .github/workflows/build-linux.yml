@@ -28,8 +28,12 @@ jobs:
           scope: "@luxonis"
       - name: Build
         run: |
-          sudo apt-get update
+          wget -O podman.tar "https://hub-agent.luxonis.com/?podman=4.2.0&arch=$(uname -m)"
+          sudo tar -C / -xvf podman.tar --strip-components=2
+          rm -rf podman.tar
+          sudo chmod +x /usr/bin/crun
           sudo loginctl enable-linger 1000
+
           npm install
           podman build -t nodedatachannel-builder --build-arg "NODE_VERSION=v${NODE_VERSION}" .
           podman run --rm -v .:/app localhost/nodedatachannel-builder:latest
