@@ -79,13 +79,13 @@ void RtcpSrReporterWrapper::configSetTimestamp(const Napi::CallbackInfo &info)
     if (!mRtcpSrReporterPtr)
     {
         Napi::Error::New(info.Env(), "configSetTimestamp() called on invalid reporter").ThrowAsJavaScriptException();
-        return info.Env().Null();
+        return;
     }
 
     if (info.Length() < 1 || !info[0].IsNumber())
     {
         Napi::Error::New(info.Env(), "configTimestampToSeconds() called with invalid parameters").ThrowAsJavaScriptException();
-        return info.Env().Null();
+        return;
     }
 
     mRtcpSrReporterPtr->rtpConfig->timestamp = info[0].As<Napi::Number>().Uint32Value();
