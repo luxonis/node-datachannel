@@ -22,6 +22,7 @@ public:
 
     // Functions
     Napi::Value previousReportedTimestamp(const Napi::CallbackInfo &info);
+    void configSetTimestamp(const Napi::CallbackInfo &info);
     Napi::Value configGetTimestamp(const Napi::CallbackInfo &info);
     Napi::Value configTimestampToSeconds(const Napi::CallbackInfo &info);
     void setNeedsToReport(const Napi::CallbackInfo &info);

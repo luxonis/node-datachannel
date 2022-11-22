@@ -236,6 +236,7 @@ export class DataChannelStream extends stream.Duplex {
 
 export class RtcpSrReporter {
     previousReportedTimestamp(): number;
+    configSetTimestamp(value: number): void;
     configGetTimestamp(): number;
     configTimestampToSeconds(value: number): number;
     setNeedsToReport(): void;

@@ -19,6 +19,7 @@ Napi::Object RtcpSrReporterWrapper::Init(Napi::Env env, Napi::Object exports)
           "RtcpSrReporter",
           {
               InstanceMethod("previousReportedTimestamp", &RtcpSrReporterWrapper::previousReportedTimestamp),
+              InstanceMethod("configSetTimestamp", &RtcpSrReporterWrapper::configSetTimestamp),
               InstanceMethod("configGetTimestamp", &RtcpSrReporterWrapper::configGetTimestamp),
               InstanceMethod("configTimestampToSeconds", &RtcpSrReporterWrapper::configTimestampToSeconds),
               InstanceMethod("setNeedsToReport", &RtcpSrReporterWrapper::setNeedsToReport),
@@ -71,6 +72,23 @@ Napi::Value RtcpSrReporterWrapper::configGetTimestamp(const Napi::CallbackInfo &
     }
 
     return Napi::Number::New(info.Env(), mRtcpSrReporterPtr->rtpConfig->timestamp);
+}
+
+void RtcpSrReporterWrapper::configSetTimestamp(const Napi::CallbackInfo &info)
+{
+    if (!mRtcpSrReporterPtr)
+    {
+        Napi::Error::New(info.Env(), "configSetTimestamp() called on invalid reporter").ThrowAsJavaScriptException();
+        return info.Env().Null();
+    }
+
+    if (info.Length() < 1 || !info[0].IsNumber())
+    {
+        Napi::Error::New(info.Env(), "configTimestampToSeconds() called with invalid parameters").ThrowAsJavaScriptException();
+        return info.Env().Null();
+    }
+
+    mRtcpSrReporterPtr->rtpConfig->timestamp = info[0].As<Napi::Number>().Uint32Value();
 }
 
 Napi::Value RtcpSrReporterWrapper::configTimestampToSeconds(const Napi::CallbackInfo &info)
