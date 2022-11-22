@@ -21,6 +21,7 @@ Napi::Object RtcpSrReporterWrapper::Init(Napi::Env env, Napi::Object exports)
               InstanceMethod("previousReportedTimestamp", &RtcpSrReporterWrapper::previousReportedTimestamp),
               InstanceMethod("configSetTimestamp", &RtcpSrReporterWrapper::configSetTimestamp),
               InstanceMethod("configGetTimestamp", &RtcpSrReporterWrapper::configGetTimestamp),
+              InstanceMethod("configSecondsToTimestamp", &RtcpSrReporterWrapper::configSecondsToTimestamp),
               InstanceMethod("configTimestampToSeconds", &RtcpSrReporterWrapper::configTimestampToSeconds),
               InstanceMethod("setNeedsToReport", &RtcpSrReporterWrapper::setNeedsToReport),
               InstanceMethod("setStartTimeToCurrent", &RtcpSrReporterWrapper::setStartTimeToCurrent),
@@ -84,11 +85,28 @@ void RtcpSrReporterWrapper::configSetTimestamp(const Napi::CallbackInfo &info)
 
     if (info.Length() < 1 || !info[0].IsNumber())
     {
-        Napi::Error::New(info.Env(), "configTimestampToSeconds() called with invalid parameters").ThrowAsJavaScriptException();
+        Napi::Error::New(info.Env(), "configSetTimestamp() called with invalid parameters").ThrowAsJavaScriptException();
         return;
     }
 
     mRtcpSrReporterPtr->rtpConfig->timestamp = info[0].As<Napi::Number>().Uint32Value();
+}
+
+Napi::Value RtcpSrReporterWrapper::configSecondsToTimestamp(const Napi::CallbackInfo &info)
+{
+    if (!mRtcpSrReporterPtr)
+    {
+        Napi::Error::New(info.Env(), "configSecondsToTimestamp() called on invalid reporter").ThrowAsJavaScriptException();
+        return info.Env().Null();
+    }
+
+    if (info.Length() < 1 || !info[0].IsNumber())
+    {
+        Napi::Error::New(info.Env(), "configSecondsToTimestamp() called with invalid parameters").ThrowAsJavaScriptException();
+        return info.Env().Null();
+    }
+
+    return Napi::Number::New(info.Env(), mRtcpSrReporterPtr->rtpConfig->secondsToTimestamp(info[0].As<Napi::Number>().DoubleValue()));
 }
 
 Napi::Value RtcpSrReporterWrapper::configTimestampToSeconds(const Napi::CallbackInfo &info)

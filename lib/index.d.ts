@@ -238,6 +238,7 @@ export class RtcpSrReporter {
     previousReportedTimestamp(): number;
     configSetTimestamp(value: number): void;
     configGetTimestamp(): number;
+    configSecondsToTimestamp(value: number): number;
     configTimestampToSeconds(value: number): number;
     setNeedsToReport(): void;
     setStartTimeToCurrent(): void;
