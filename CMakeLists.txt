@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 cmake_policy(SET CMP0091 NEW)
-project(node_datachannel VERSION 1.0.4)
+project(node_datachannel VERSION 1.0.5)
 set(BUILD_SHARED_LIBS OFF)
 
 add_compile_definitions(OPENSSL_API_COMPAT=0x10100001L)
