@@ -22,6 +22,7 @@ Napi::Object RtcpSrReporterWrapper::Init(Napi::Env env, Napi::Object exports)
               InstanceMethod("configGetTimestamp", &RtcpSrReporterWrapper::configGetTimestamp),
               InstanceMethod("configTimestampToSeconds", &RtcpSrReporterWrapper::configTimestampToSeconds),
               InstanceMethod("setNeedsToReport", &RtcpSrReporterWrapper::setNeedsToReport),
+              InstanceMethod("setStartTimeToCurrent", &RtcpSrReporterWrapper::setStartTimeToCurrent),
           }
       );
   
