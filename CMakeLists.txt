@@ -18,6 +18,8 @@ set(NO_WEBSOCKET ON)
 set(NO_EXAMPLES ON)
 set(NO_TESTS ON)
 set(USE_NICE OFF)
+set(USE_SYSTEM_JUICE OFF)
+set(ENABLE_LOCALHOST_ADDRESS ON)
 
 add_library(${PROJECT_NAME} SHARED
     src/rtc-wrapper.cpp
