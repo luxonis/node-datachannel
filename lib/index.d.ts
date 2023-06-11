@@ -235,12 +235,10 @@ export class DataChannelStream extends stream.Duplex {
 }
 
 export class RtcpSrReporter {
-    previousReportedTimestamp(): number;
+    lastReportedTimestamp(): number;
     configSetTimestamp(value: number): void;
     configGetTimestamp(): number;
     configSecondsToTimestamp(value: number): number;
     configTimestampToSeconds(value: number): number;
     setNeedsToReport(): void;
-    setStartTimeToCurrent(): void;
-    startRecording(): void;
 }

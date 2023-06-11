@@ -3,8 +3,8 @@ project(node_datachannel VERSION 1.0.7)
 set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-add_compile_definitions(OPENSSL_API_COMPAT=0x10100001L)
-add_compile_definitions(OPENSSL_CONFIGURED_API=0x30000000L)
+# add_compile_definitions(OPENSSL_API_COMPAT=0x10100001L)
+# add_compile_definitions(OPENSSL_CONFIGURED_API=0x30000000L)
 
 include_directories(${CMAKE_JS_INC})
 

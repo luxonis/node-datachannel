@@ -5,7 +5,7 @@ on:
 
 env:
   ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-  NODE_VERSION: "18.5.0"
+  NODE_VERSION: "18.16.0"
 
 jobs:
   build:

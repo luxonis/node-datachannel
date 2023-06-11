@@ -280,7 +280,6 @@ Napi::Value TrackWrapper::setH264Packetizer(const Napi::CallbackInfo &info)
         info[1].As<Napi::String>().Utf8Value(),
         info[2].As<Napi::Number>().Uint32Value(),
         rtc::H264RtpPacketizer::defaultClockRate,
-        0,
         0);
     // create packetizer
     auto packetizer =
